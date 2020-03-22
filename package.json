@@ -25,12 +25,19 @@
     ],
     "extends": null,
     "win": {
-      "target": ["nsis","msi"],
-      "icon": "icon1.ico"
+      "target": [
+        "nsis",
+        "msi"
+      ],
+      "icon": "icon1.ico",
+      "push": ["github"]
     },
     "mac": {
-      "target": ["dmg"],
-      "icon": "assets/icon1.icns"
+      "target": [
+        "dmg"
+      ],
+      "icon": "assets/icon1.icns",
+      "push": ["github"]
     },
     "dmg": {
       "title": "${productName}",
@@ -72,7 +79,6 @@
     "electron-store": "^5.1.0",
     "qiniu": "^7.3.0"
   },
-
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -83,7 +89,9 @@
     "prepack": "npm run build",
     "pack": "electron-builder --dir",
     "predist": "npm run build",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "prerelease": "npm run build",
+    "release": "electron-builder"
   },
   "homepage": "./",
   "eslintConfig": {
@@ -102,13 +110,6 @@
     ]
   },
   "devDependencies": {
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-scripts": "3.4.0",
-    "react-simplemde-editor": "^4.1.0",
-    "uuid": "^3.4.0",
-    "node-sass": "^4.13.1",
-    "classnames": "^2.2.6",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-brands-svg-icons": "^5.12.1",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
@@ -116,11 +117,19 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "electron": "^8.0.0",
+    "classnames": "^2.2.6",
     "concurrently": "^5.1.0",
     "cross-env": "^7.0.0",
+    "electron": "^8.0.0",
     "electron-builder": "^22.4.1",
+    "electron-updater": "^4.2.5",
+    "node-sass": "^4.13.1",
     "nodemon": "^2.0.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-scripts": "3.4.0",
+    "react-simplemde-editor": "^4.1.0",
+    "uuid": "^3.4.0",
     "wait-on": "^4.0.0"
   }
 }
