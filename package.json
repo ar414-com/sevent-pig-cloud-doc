@@ -1,0 +1,126 @@
+{
+  "name": "sevent-pig-cloud",
+  "version": "0.1.0",
+  "main": "main.js",
+  "description": "Online Markdown Editor Doc using Qinui cloud service",
+  "author": {
+    "name": "ar414",
+    "email": "root@ar414.com"
+  },
+  "repository": "https://ar414-com.github.com/sevent-pig-cloud",
+  "build": {
+    "appId": "com.ar414.sevent-pig-cloud",
+    "directories": {
+      "buildResources": "assets"
+    },
+    "productName": "七猪云文档",
+    "copyright": "Copyright © 2020 ${author}",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "src/html/**/*",
+      "src/class/**/*",
+      "main.js",
+      "src/menuTemplate.js"
+    ],
+    "extends": null,
+    "win": {
+      "target": ["nsis","msi"],
+      "icon": "icon1.ico"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "assets/icon1.icns"
+    },
+    "dmg": {
+      "title": "${productName}",
+      "background": "assets/dmgBackground.png",
+      "icon": "assets/icon1.icns",
+      "iconSize": 100,
+      "window": {
+        "width": 540,
+        "height": 400
+      },
+      "contents": [
+        {
+          "x": 430,
+          "y": 180,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 120,
+          "y": 180,
+          "type": "file"
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "uninstallDisplayName": "${productName}",
+      "artifactName": "${name} Setup.${ext}"
+    }
+  },
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.16.1",
+    "axios": "^0.19.2",
+    "electron-is-dev": "^1.1.0",
+    "electron-store": "^5.1.0",
+    "qiniu": "^7.3.0"
+  },
+
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "electron-reload": "nodemon --watch main.js --watch src/menuTemplate.js --exec \"electron .\"",
+    "dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://127.0.0.1:3000 && electron .\"",
+    "prepack": "npm run build",
+    "pack": "electron-builder --dir",
+    "predist": "npm run build",
+    "dist": "electron-builder"
+  },
+  "homepage": "./",
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-scripts": "3.4.0",
+    "react-simplemde-editor": "^4.1.0",
+    "uuid": "^3.4.0",
+    "node-sass": "^4.13.1",
+    "classnames": "^2.2.6",
+    "@fortawesome/fontawesome-svg-core": "^1.2.27",
+    "@fortawesome/free-brands-svg-icons": "^5.12.1",
+    "@fortawesome/free-solid-svg-icons": "^5.12.1",
+    "@fortawesome/react-fontawesome": "^0.1.8",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "electron": "^8.0.0",
+    "concurrently": "^5.1.0",
+    "cross-env": "^7.0.0",
+    "electron-builder": "^22.4.1",
+    "nodemon": "^2.0.2",
+    "wait-on": "^4.0.0"
+  }
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设置</title>
+    <link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <script>
+        window.jQuery = window.$ = require('jquery');
+    </script>
+    <script src="../../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <style>
+        label.select-file:after {
+            background-color: #FFF;
+            color: dodgerblue;
+            border: dodgerblue;
+        }
+        label.select-file {
+            background-color: #D0D0D0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container bg-white">
+        <div class="row mt-3">
+            <div class="col">
+                <h4 class="font-weight-bold">设置</h4>
+            </div>
+        </div>
+
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">文件存储位置</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">七牛云配置</a>
+            </div>
+        </nav>
+
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div class="row mt-2 text-muted">
+                    <div class="col">
+                        <h7>选择文件存储位置</h7>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col">
+                        <div class="custom-file" id="select-folder">
+                            <input type="file" class="custom-file-input">
+                            <label class="custom-file-label select-file" id="customFileLangHTML" data-browse="选择新的位置">当前存储位置</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade mt-4" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+<!--                <form>-->
+                    <div class="form-group row">
+                        <label for="accesskey" class="col-3 col-form-label mr-0">Access Key</label>
+                        <div class="col-9">
+                            <input type="text" class="form-control" id="accesskey" placeholder="请输入Access Key">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="secretkey" class="col-3 col-form-label mr-0">Secret Key</label>
+                        <div class="col-9">
+                            <input type="text" class="form-control" id="secretkey" placeholder="请输入Secret Key">
+                        </div>
+                    </div>
+                <div class="form-group row">
+                    <label for="bucket" class="col-3 col-form-label mr-0">Bucket</label>
+                    <div class="col-9">
+                        <input type="text" class="form-control" id="bucket" placeholder="请输入Bucket空间名称">
+                    </div>
+                </div>
+<!--                </form>-->
+            </div>
+        </div>
+
+
+        <div class="row mt-3">
+            <div class="col">
+                <button type="button" id="save" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    require('./setting.js');
+</script>
+</html>

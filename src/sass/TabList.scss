@@ -1,0 +1,47 @@
+.tab-list-component {
+
+  a.nav-link:hover {
+    .file-close-icon {
+      display: inline-block;
+    }
+  }
+
+  a.nav-link.active {
+    .file-close-icon{
+      display: inline-block;
+    }
+  }
+
+  .file-close-icon {
+    display: none;
+    color: inherit;
+  }
+
+  .file-un-save-icon {
+    display: inline-block;
+    //width: 7px;
+    //height: 7px;
+    color: #7f7f7f;
+  }
+
+  a.nav-link.is-un-save {
+    .file-un-save-icon {
+      display: inline-block;
+    }
+    .file-close-icon {
+      display: none;
+    }
+  }
+
+  a.nav-link.is-un-save:hover {
+    .file-un-save-icon {
+      display: none;
+    }
+    .file-close-icon {
+      display: inline-block;
+    }
+  }
+}
+
+
+
