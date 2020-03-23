@@ -8,6 +8,7 @@ const QiniuManager = require("./src/class/QiniuManager");
 const Store = require('electron-store');
 const StoreKey = require('./src/class/StoreKey');
 const appSetting = new Store({name:'settings'});
+const { autoUpdater } = require("electron-updater");
 let mainWindow;
 let appMenu;
 let qiniuManager;
@@ -15,6 +16,10 @@ app.on('ready',() => {
 
     const url = isDev ? "http://localhost:3000/" : `file://${path.join(__dirname,'./build/index.html')}`;
 
+    // autoUpdater.updateConfigPath =
+    autoUpdater.checkForUpdatesAndNotify().then((updateInfo,downloadPromise,cancellationToken,versionInfo) => {
+        console.log(updateInfo,versionInfo);
+    });
     mainWindow = new AppWindow({
         width: 1024,
         height: 680,
@@ -22,6 +27,7 @@ app.on('ready',() => {
 
     initAppMenu();
     updateFileIndex();
+
     mainWindow.on('closed', () => {
         mainWindow = null;
     });
