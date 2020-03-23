@@ -1,5 +1,5 @@
 {
-  "name": "sevent-pig-cloud",
+  "name": "sevent-pig-cloud-doc",
   "version": "0.1.0",
   "main": "main.js",
   "description": "Online Markdown Editor Doc using Qinui cloud service",
@@ -7,7 +7,7 @@
     "name": "ar414",
     "email": "root@ar414.com"
   },
-  "repository": "https://ar414-com.github.com/sevent-pig-cloud",
+  "repository": "https://github.com/ar414-com/sevent-pig-cloud-doc.git",
   "build": {
     "appId": "com.ar414.sevent-pig-cloud",
     "directories": {
@@ -26,18 +26,15 @@
     "extends": null,
     "win": {
       "target": [
-        "nsis",
-        "msi"
+        "nsis"
       ],
-      "icon": "icon1.ico",
-      "push": ["github"]
+      "icon": "icon1.ico"
     },
     "mac": {
       "target": [
         "dmg"
       ],
-      "icon": "assets/icon1.icns",
-      "push": ["github"]
+      "icon": "assets/icon1.icns"
     },
     "dmg": {
       "title": "${productName}",
@@ -67,7 +64,15 @@
       "allowToChangeInstallationDirectory": true,
       "uninstallDisplayName": "${productName}",
       "artifactName": "${name} Setup.${ext}"
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "repo": "sevent-pig-cloud-doc",
+        "vPrefixedTagName": true,
+        "releaseType": "release"
+      }
+    ]
   },
   "private": true,
   "dependencies": {
@@ -91,7 +96,7 @@
     "predist": "npm run build",
     "dist": "electron-builder",
     "prerelease": "npm run build",
-    "release": "electron-builder"
+    "release": "cross-env GH_TOKEN=test electron-builder"
   },
   "homepage": "./",
   "eslintConfig": {

@@ -6,9 +6,12 @@ const Store = require('electron-store');
 
 const StoreKey = require('./class/StoreKey');
 const appSetting = new Store({name:'settings'});
-const isSetQiniuConfig = Object.values(appSetting.get(StoreKey.QINIU_CONFIG_KEY) || {}).every((value) => {
+const qiniuConfigArr = Object.values(appSetting.get(StoreKey.QINIU_CONFIG_KEY) || {});
+const isSetQiniuConfig = qiniuConfigArr.length === 0 ? false : qiniuConfigArr.every((value) => {
     return !!value;
 });
+
+
 
 const isAutoSyncStatus = appSetting.get(StoreKey.AUTO_SYNC_STATUS_KEY);
 
@@ -98,6 +101,7 @@ const menuTemplate = [
                     const cloudSyncStatus = menuItem.checked;
                     appSetting.set(StoreKey.AUTO_SYNC_STATUS_KEY,cloudSyncStatus);
                     browserWindow.webContents.send('MenuAction','change_cloud_sync_status');
+                    cloudSyncStatus && ipcMain.emit('change_cloud_config');
                 }
             },
             {
