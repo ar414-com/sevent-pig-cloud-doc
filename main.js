@@ -112,36 +112,49 @@ function triggerAutoUpdate()
         autoUpdater.updateConfigPath = path.join(__dirname,"./app-update.yml");
     }
     autoUpdater.autoDownload = false;
-    autoUpdater.checkForUpdates().then((ret) => {
-        console.log(ret);
-        if(ret.downloadPromise !== undefined){
-            console.log(ret)
-        }
+    autoUpdater.checkForUpdates();
+
+    autoUpdater.on('error',(e) => {
+        //更新错误
+        console.log('更新错误',e);
     });
 
-    // autoUpdater.on('error',(e) => {
-    //     console.log('error',e);
-    // });
-    //
-    // autoUpdater.on('checking-for-update',(ret) => {
-    //     console.log('checking-for-update',ret);
-    // });
-    //
-    // autoUpdater.on('update-available',(ret) => {
-    //     console.log('update-available',ret);
-    // });
-    //
-    // autoUpdater.on('update-not-available',(ret) => {
-    //     console.log('update-not-available',ret);
-    // });
-    //
-    // autoUpdater.on('download-progress',(ret) => {
-    //     console.log('download-progress',ret);
-    // });
-    //
-    // autoUpdater.on('update-downloaded',(ret) => {
-    //     console.log('update-downloaded',ret);
-    // });
+    autoUpdater.on('checking-for-update',(ret) => {
+        //开始检测更新
+        console.log('checking-for-update',ret);
+    });
+
+    autoUpdater.on('update-available',(ret) => {
+        //发现新版本
+        dialog.showMessageBox({
+            type: 'info',
+            title: '发现新版本',
+            message: ret.releaseNotes,
+            cancelId:0,
+            defaultId:1,
+            buttons: ['稍后再说','立即更新']
+        }).then((ret) => {
+            if(ret.response === 1) {
+                autoUpdater.downloadUpdate();
+            }
+        });
+        console.log('update-available',ret);
+    });
+
+    autoUpdater.on('update-not-available',(ret) => {
+        //没有发现更新
+        console.log('update-not-available',ret);
+    });
+
+    autoUpdater.on('download-progress',(ret) => {
+        //下载进度
+        console.log('download-progress',ret);
+    });
+
+    autoUpdater.on('update-downloaded',(ret) => {
+        //完成更新包下载
+        console.log('update-downloaded',ret);
+    });
 }
 
 /**
