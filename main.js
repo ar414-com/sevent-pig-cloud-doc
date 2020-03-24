@@ -15,11 +15,7 @@ let qiniuManager;
 app.on('ready',() => {
 
     const url = isDev ? "http://localhost:3000/" : `file://${path.join(__dirname,'./build/index.html')}`;
-
-    // autoUpdater.updateConfigPath =
-    autoUpdater.checkForUpdatesAndNotify().then((updateInfo,downloadPromise,cancellationToken,versionInfo) => {
-        console.log(updateInfo,versionInfo);
-    });
+    triggerAutoUpdate();
     mainWindow = new AppWindow({
         width: 1024,
         height: 680,
@@ -107,6 +103,45 @@ function initAppMenu()
 {
     appMenu = Menu.buildFromTemplate(menuTemplate);
     Menu.setApplicationMenu(appMenu);
+}
+
+function triggerAutoUpdate()
+{
+    if(isDev){
+        console.log(path.join(__dirname,"./app-update.yml"));
+        autoUpdater.updateConfigPath = path.join(__dirname,"./app-update.yml");
+    }
+    autoUpdater.autoDownload = false;
+    autoUpdater.checkForUpdates().then((ret) => {
+        console.log(ret);
+        if(ret.downloadPromise !== undefined){
+            console.log(ret)
+        }
+    });
+
+    // autoUpdater.on('error',(e) => {
+    //     console.log('error',e);
+    // });
+    //
+    // autoUpdater.on('checking-for-update',(ret) => {
+    //     console.log('checking-for-update',ret);
+    // });
+    //
+    // autoUpdater.on('update-available',(ret) => {
+    //     console.log('update-available',ret);
+    // });
+    //
+    // autoUpdater.on('update-not-available',(ret) => {
+    //     console.log('update-not-available',ret);
+    // });
+    //
+    // autoUpdater.on('download-progress',(ret) => {
+    //     console.log('download-progress',ret);
+    // });
+    //
+    // autoUpdater.on('update-downloaded',(ret) => {
+    //     console.log('update-downloaded',ret);
+    // });
 }
 
 /**

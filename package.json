@@ -1,6 +1,6 @@
 {
   "name": "sevent-pig-cloud-doc",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "main": "main.js",
   "description": "Online Markdown Editor Doc using Qinui cloud service",
   "author": {
@@ -97,7 +97,7 @@
     "predist": "npm run build",
     "dist": "electron-builder",
     "prerelease": "npm run build",
-    "release": "cross-env GH_TOKEN=test electron-builder"
+    "release": "cross-env GH_TOKEN=61a1e67202776933c412b03d1b0e1f2b0721e986 electron-builder"
   },
   "homepage": "./",
   "eslintConfig": {

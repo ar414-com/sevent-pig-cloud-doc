@@ -1,0 +1,6 @@
+owner: ar414-com
+repo: sevent-pig-cloud-doc
+provider: github
+vPrefixedTagName: true
+releaseType: release
+updaterCacheDirName: sevent-pig-cloud-doc-updater
