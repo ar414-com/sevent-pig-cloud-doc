@@ -15,6 +15,7 @@ class IpcMainListenerManager {
         this.onChangeSavePath();
         this.onChangeCloudConfig();
         if(applicationClass.getIsSetQiniuConfig()){
+            this.application.updateFileIndex();
             this.onDownloadFile();
             this.onDelFile();
             this.onUploadFile();

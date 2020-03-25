@@ -266,36 +266,7 @@ function App() {
             if (canceled) {
                 return;
             }
-            //check file is already import
             importFilesForFilePaths(filePaths);
-            // const importFilePaths = filePaths.filter(path => {
-            //     const alreadyAdded = Object.values(files).find(file => {
-            //         return file.path === path;
-            //     });
-            //     return !alreadyAdded;
-            // });
-            // //generate store data format
-            // if (importFilePaths.length > 0) {
-            //     const importFilesArr = importFilePaths.map(filePath => {
-            //         return {
-            //             id: uuidv4(),
-            //             [FileFiledMap.title]: path.basename(filePath, path.extname(filePath)),
-            //             [FileFiledMap.creatTime]: (new Date().getTime()),
-            //             [FileFiledMap.path]: filePath,
-            //         };
-            //     });
-            //     // save to store and location content
-            //     const newFiles = {...files, ...flattenArr(importFilesArr)};
-            //     setFiles({...newFiles});
-            //     FileIndex.save(newFiles);
-            // }
-            //
-            // remote.dialog.showMessageBox({
-            //     type: 'info',
-            //     title: '操作成功',
-            //     message: `成功导入 ${importFilePaths.length} 个文件`
-            // });
-
         });
     };
 
@@ -344,6 +315,10 @@ function App() {
         setIsShow(false);
     };
 
+    const reloadFileIndex = (event,args) => {
+        setFiles(FileIndex.getList());
+    };
+
     //TODO 封装HOOK
     useEffect(() => {
         ipcRenderer.on('MenuAction',menuAction);
@@ -352,6 +327,7 @@ function App() {
         ipcRenderer.on('downloadFile',downloadFileCallback);
         ipcRenderer.on('startLoading',startLoading);
         ipcRenderer.on('endLoading',endLoading);
+        ipcRenderer.on('reloadFileIndex',reloadFileIndex);
         return () => {
             ipcRenderer.removeListener('MenuAction',menuAction)
             ipcRenderer.removeListener('changeSavePath',changeSavePath)

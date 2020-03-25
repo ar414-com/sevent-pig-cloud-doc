@@ -157,7 +157,8 @@ class Application {
             const fileKey = path.basename(store.path);
             _qiniuManger.getFileStat(fileKey).then((data) => {
                 const putTime = Math.round(data.data.putTime / 10000);
-                if(putTime > store.get('update_time')){
+                const updateTime = store.get('update_time');
+                if(!updateTime || putTime > store.get('update_time')){
                     this.mainWindow.webContents.send('startLoading');
                     _qiniuManger.downloadFile(fileKey,store.path).then((data) => {
                         let fileSavePath = store.get(StoreKey.SAVE_PATH_KEY);
@@ -172,6 +173,8 @@ class Application {
                         });
                         newFileIndex = Object.fromEntries(newFileIndex.map(item => [item.id, item]));
                         store.set(StoreKey.FILES_INDEX_KEY,newFileIndex);
+                        //TODO 刷新文件索引
+                        this.mainWindow.webContents.send('reloadFileIndex',null);
                         this.mainWindow.webContents.send('endLoading',null);
                     }).catch(error => {
                         this.mainWindow.webContents.send('endLoading',null);

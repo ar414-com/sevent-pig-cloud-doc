@@ -30,8 +30,8 @@
 
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">文件存储位置</a>
-                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">七牛云配置</a>
+                <a class="nav-item nav-link active" id="nav-home-tab" data-flag="path-config" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">文件存储位置</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-flag="cloud-config" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">七牛云配置</a>
             </div>
         </nav>
 
@@ -79,11 +79,21 @@
         <div class="row mt-3">
             <div class="col">
                 <button type="button" id="save" class="btn btn-primary">保存</button>
+                <button type="button" id="check" class="btn btn-success d-none">云配置检测</button>
             </div>
         </div>
     </div>
 </body>
 <script>
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        e.target // newly activated tab
+        e.relatedTarget // previous active tab
+        if($(e.target).data('flag') === 'cloud-config'){
+            $('#check').attr('class','btn btn-success')
+        }else{
+            $('#check').attr('class','d-none')
+        }
+    });
     require('./setting.js');
 </script>
 </html>
