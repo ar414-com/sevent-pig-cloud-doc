@@ -8,6 +8,10 @@ class IpcMainListenerManager {
     constructor(mainWindow) {
         this.mainWindow = mainWindow;
         this.application = new applicationClass(this.mainWindow);
+    }
+
+    initListener() {
+        this.onOpenSettingWindow();
         this.onChangeSavePath();
         this.onChangeCloudConfig();
         if(applicationClass.getIsSetQiniuConfig()){
@@ -18,14 +22,10 @@ class IpcMainListenerManager {
         }
     }
 
-    initListener() {
-        this.onOpenSettingWindow();
-    }
-
     onUpdateFileIndex() {
         ipcMain.on('update_file_index',(event,args) => {
             applicationClass.getQiniuManager().uploadLocationFile(args).then((data) => {
-                mainWindow.webContents.send('updateFileIndexDone');
+                this.mainWindow.webContents.send('updateFileIndexDone');
             }).catch((err) => {
                 dialog.showErrorBox('更新索引','请检查云配置是否正确');
             });
@@ -41,7 +41,7 @@ class IpcMainListenerManager {
     onUploadFile() {
         ipcMain.on('upload_file', (event,args) => {
             applicationClass.getQiniuManager().uploadLocationFile(args).then((data) => {
-                mainWindow.webContents.send('uploadFileSuccess',args);
+                this.mainWindow.webContents.send('uploadFileSuccess',args);
             }).catch((err) => {
                 dialog.showErrorBox('上传失败','请检查云配置是否正确');
             });
@@ -56,6 +56,7 @@ class IpcMainListenerManager {
 
     onChangeCloudConfig() {
         ipcMain.on('change_cloud_config', (event,args) => {
+            //TODO 校验配置是否正确
             this.application.updateCloudSyncMenu();
             this.application.updateFileIndex();
         });
@@ -88,7 +89,6 @@ class IpcMainListenerManager {
 
     onOpenSettingWindow() {
         ipcMain.on('open-setting-window',() => {
-            console.log(path.join(applicationClass.getAppRootPath(),'./src/html/setting/setting.html'))
             this.settingWindow =  new AppWindow({
                 width: 580,
                 height: 380,
@@ -96,9 +96,11 @@ class IpcMainListenerManager {
                 autoHideMenuBar: true,
                 maximizable: false,
                 minimizable: false,
-            },`file://${path.join(applicationClass.getAppRootPath(),'./src/setting/setting.html')}`);
+                modal:true,
+            },`file://${path.join(applicationClass.getAppRootPath(),'./src/html/setting/setting.html')}`);
             this.settingWindow.on('closed', () => {
                 this.settingWindow = null;
+                this.mainWindow.focus();
             });
         });
     }

@@ -3,6 +3,7 @@ const { app } = require('electron');
 const applicationClass = require("./src/class/Application");
 const ipcMainListenerManagerClass  = require("./src/class/IpcMainListenerManager");
 let mainWindow;
+
 app.on('ready',() => {
 
     mainWindow = new AppWindow({
@@ -14,7 +15,7 @@ app.on('ready',() => {
     });
     const application = new applicationClass(mainWindow);
     const ipcMainListenerManager  = new ipcMainListenerManagerClass(mainWindow);
-
+    application.onAppAutoUpdate();
     application.createTray();
     application.createAppMenu();
     ipcMainListenerManager.initListener();

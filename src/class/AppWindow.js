@@ -19,6 +19,7 @@ class AppWindow extends BrowserWindow {
         this.loadURL(url);
         this.once('ready-to-show', () => {
             this.show();
+            // this.focus();
         });
     }
 

@@ -1,6 +1,7 @@
-const { app, Menu, dialog, Tray } = require('electron');
+const { app, Menu, dialog,BrowserWindow, Tray } = require('electron');
 const Store = require('electron-store');
 const isDev = require('electron-is-dev');
+const QiniuManager = require('./QiniuManager');
 const menuTemplate  = require("../menuTemplate");
 const packageData = require("./PackageData");
 const path = require('path');
@@ -12,11 +13,10 @@ class Application {
 
     constructor(mainWindow) {
         this.mainWindow = mainWindow;
-        this.onAppAutoUpdate();
+        this.appMenu = Menu.buildFromTemplate(menuTemplate);
     }
 
     createAppMenu() {
-        this.appMenu = Menu.buildFromTemplate(menuTemplate);
         Menu.setApplicationMenu(this.appMenu);
     }
 
@@ -42,6 +42,8 @@ class Application {
             this.appMenu.items[3].submenu.items[i].enabled = isSetQiniuConfig;
         }
 
+        Menu.setApplicationMenu(this.appMenu);
+
     }
 
     onAppAutoUpdate() {
@@ -49,7 +51,6 @@ class Application {
         autoUpdater.autoDownload = false;
 
         if(isDev){
-            console.log(path.join(Application.getAppRootPath(),"./app-update.yml"));
             autoUpdater.updateConfigPath = path.join(Application.getAppRootPath(),"./app-update.yml");
         }
 
@@ -67,13 +68,14 @@ class Application {
 
         autoUpdater.on('update-available',(ret) => {
             //发现新版本
-            dialog.showMessageBox({
-                type: 'info',
-                title: '发现新版本',
-                message: ret.releaseNotes,
-                cancelId:0,
-                defaultId:1,
-                buttons: ['稍后再说','立即更新']
+            this.mainWindow.show();
+            Application.showBox({
+                    type: 'info',
+                    title: '发现新版本',
+                    message: ret.releaseNotes,
+                    cancelId:0,
+                    defaultId:1,
+                    buttons: ['稍后再说','立即更新']
             }).then((ret) => {
                 if(ret.response === 1) {
                     autoUpdater.downloadUpdate();
@@ -92,7 +94,7 @@ class Application {
             // mainWindow.setProgressBar
             console.log('download-progress',ret);
             if(ret.total && ret.total > 0){
-                mainWindow.setProgressBar(ret.percent / 100);
+                this.mainWindow.setProgressBar(ret.percent / 100);
             }
         });
 
@@ -100,6 +102,14 @@ class Application {
             //完成更新包下载
             console.log('update-downloaded',ret);
         });
+    }
+
+    static showBox(option) {
+        return dialog.showMessageBox(new BrowserWindow({
+            show: false,
+            modal:true,
+            alwaysOnTop: true
+        }),option);
     }
 
     static getAppRootPath() {

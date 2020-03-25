@@ -1,15 +1,15 @@
 const { ipcMain,dialog } = require('electron');
-
 const isMac = process.platform === 'darwin'
-
 const Store = require('electron-store');
-
 const StoreKey = require('./class/StoreKey');
+const Application = require('./class/Application');
 const appSetting = new Store({name:'settings'});
 const qiniuConfigArr = Object.values(appSetting.get(StoreKey.QINIU_CONFIG_KEY) || {});
 const isSetQiniuConfig = qiniuConfigArr.length === 0 ? false : qiniuConfigArr.every((value) => {
     return !!value;
 });
+
+console.log(Application);
 
 
 
@@ -108,14 +108,24 @@ const menuTemplate = [
                 label: '全部同步至云端',
                 enabled: isSetQiniuConfig,
                 click: (menuItem,browserWindow,event) => {
-                    ipcMain.emit('open-setting-window');
+                    dialog.showMessageBoxSync({
+                        options:'warning',
+                        title:'系统',
+                        message:'暂不支持'
+                    });
+                    // ipcMain.emit('open-setting-window');
                 }
             },
             {
                 label: '从云端同步到本地',
                 enabled: isSetQiniuConfig,
                 click: (menuItem,browserWindow,event) => {
-                    ipcMain.emit('open-setting-window');
+                    dialog.showMessageBoxSync({
+                        options:'warning',
+                        title:'系统',
+                        message:'暂不支持'
+                    });
+                    // ipcMain.emit('open-setting-window');
                 }
             },
         ]
