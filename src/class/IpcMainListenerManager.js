@@ -2,7 +2,7 @@ const { ipcMain, dialog } = require('electron');
 const AppWindow = require('./AppWindow');
 const path = require('path');
 const applicationClass = require("./Application");
-
+const fs = require('fs');
 class IpcMainListenerManager {
 
     constructor(mainWindow) {
