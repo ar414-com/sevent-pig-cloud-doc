@@ -16,7 +16,7 @@ app.on('ready',() => {
     const application = new applicationClass(mainWindow);
     const ipcMainListenerManager  = new ipcMainListenerManagerClass(mainWindow);
     application.onAppAutoUpdate();
-    application.createTray();
     application.createAppMenu();
     ipcMainListenerManager.initListener();
+    application.createTray();
 });

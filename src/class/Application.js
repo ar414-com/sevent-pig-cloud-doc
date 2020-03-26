@@ -1,14 +1,16 @@
-const { app, Menu, dialog,BrowserWindow, Tray } = require('electron');
+const { app, Menu, dialog, BrowserWindow, Tray } = require('electron');
 const Store = require('electron-store');
 const isDev = require('electron-is-dev');
 const QiniuManager = require('./QiniuManager');
+const packageData = require('./PackageData');
 const menuTemplate  = require("../menuTemplate");
-const packageData = require("./PackageData");
 const path = require('path');
 const appSetting = new Store({name:'settings'});
 const StoreKey = require('./StoreKey');
 const { autoUpdater } = require("electron-updater");
-
+let tray = null;
+let OnlyID = null;
+let OnlyID2 = null;
 class Application {
 
     constructor(mainWindow) {
@@ -21,7 +23,7 @@ class Application {
     }
 
     createTray() {
-        const tray = new Tray(path.join(Application.getAppRootPath(),'./assets/tray.ico'));
+        tray = new Tray(path.join(Application.getAppRootPath(),'./assets/tray26.ico'));
         const trayContextMenu = Menu.buildFromTemplate([
             { label: 'Item1', type: 'radio' },
             { label: 'Item2', type: 'radio' },
@@ -30,6 +32,17 @@ class Application {
         ]);
         tray.setToolTip(packageData.getVar('cnName'));
         tray.setContextMenu(trayContextMenu);
+        OnlyID = setInterval(() => {
+            console.log(OnlyID);
+            tray.setImage(path.join(Application.getAppRootPath(),'./assets/tray-pink.ico'));
+            setTimeout(() => {
+                // 写逻辑代码
+                tray.setImage(path.join(Application.getAppRootPath(),'./assets/tray26.ico'));
+            }, 750)
+        }, 1500);
+        tray.addListener('double-click',((event, bounds) => {
+            this.mainWindow.show();
+        }));
     }
 
     updateCloudSyncMenu() {
