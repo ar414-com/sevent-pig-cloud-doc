@@ -1,4 +1,4 @@
-const { app, Menu, dialog, BrowserWindow, Tray } = require('electron');
+const { app, Menu, dialog, BrowserWindow, Tray, nativeImage } = require('electron');
 const Store = require('electron-store');
 const isDev = require('electron-is-dev');
 const QiniuManager = require('./QiniuManager');
@@ -18,6 +18,10 @@ class Application {
         this.appMenu = Menu.buildFromTemplate(menuTemplate);
     }
 
+    closeTray() {
+        tray.destroy();
+    }
+
     createAppMenu() {
         Menu.setApplicationMenu(this.appMenu);
     }
@@ -25,21 +29,21 @@ class Application {
     createTray() {
         tray = new Tray(path.join(Application.getAppRootPath(),'./assets/tray26.ico'));
         const trayContextMenu = Menu.buildFromTemplate([
-            { label: 'Item1', type: 'radio' },
-            { label: 'Item2', type: 'radio' },
-            { label: 'Item3', type: 'radio', checked: true },
-            { label: 'Item4', type: 'radio' }
+            {...this.appMenu.items[2].submenu.items[0],icon:path.join(Application.getAppRootPath(),'./src/images/setting.png'),accelerator:null},
+            { label: '退出', role: 'quit',icon:path.join(Application.getAppRootPath(),'./src/images/quit.png') }
         ]);
         tray.setToolTip(packageData.getVar('cnName'));
         tray.setContextMenu(trayContextMenu);
-        OnlyID = setInterval(() => {
-            console.log(OnlyID);
-            tray.setImage(path.join(Application.getAppRootPath(),'./assets/tray-pink.ico'));
-            setTimeout(() => {
-                // 写逻辑代码
-                tray.setImage(path.join(Application.getAppRootPath(),'./assets/tray26.ico'));
-            }, 750)
-        }, 1500);
+        //TODO 闪烁 一般是消息通知
+        // OnlyID = setInterval(() => {
+        //     console.log(OnlyID);
+        //     tray.setImage(path.join(Application.getAppRootPath(),'./assets/tray-pink.ico'));
+        //     setTimeout(() => {
+        //         // 写逻辑代码
+        //         // tray.setImage(path.join(Application.getAppRootPath(),'./assets/tray26.ico'));
+        //         tray.setImage(nativeImage.createEmpty());
+        //     }, 650)
+        // }, 1300);
         tray.addListener('double-click',((event, bounds) => {
             this.mainWindow.show();
         }));
@@ -125,6 +129,7 @@ class Application {
         }),option);
     }
 
+    //TODO 需要区分开发环境和打完完成的环境
     static getAppRootPath() {
         return path.dirname(require.main.filename);
     }

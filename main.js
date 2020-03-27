@@ -10,11 +10,11 @@ app.on('ready',() => {
         width: 1024,
         height: 680,
     },applicationClass.getMainUrl());
-    mainWindow.on('closed', () => {
-        mainWindow = null;
-    });
     const application = new applicationClass(mainWindow);
     const ipcMainListenerManager  = new ipcMainListenerManagerClass(mainWindow);
+    mainWindow.on('closed', () => {
+        app.quit();
+    });
     application.onAppAutoUpdate();
     application.createAppMenu();
     ipcMainListenerManager.initListener();
