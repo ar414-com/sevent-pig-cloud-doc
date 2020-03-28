@@ -27,6 +27,7 @@ class Application {
     }
 
     createTray() {
+        console.log('createTray')
         tray = new Tray(path.join(Application.getAppRootPath(),'./assets/tray26.ico'));
         const trayContextMenu = Menu.buildFromTemplate([
             {...this.appMenu.items[2].submenu.items[0],icon:path.join(Application.getAppRootPath(),'./src/images/setting.png'),accelerator:null},
@@ -46,6 +47,19 @@ class Application {
         // }, 1300);
         tray.addListener('double-click',((event, bounds) => {
             this.mainWindow.show();
+        }));
+        tray.addListener('mouse-enter',((event, position) => {
+            console.log('mouse-enter');
+            // this.mainWindow.show();
+        }));
+        tray.addListener('mouse-move',((event, position) => {
+            tray.displayBalloon({
+                iconType:'info',
+                title:'新消息',
+                content:'Hi,this is mouse-move event'
+            })
+            // console.log('mouse-move',event,position);
+            // this.mainWindow.show();
         }));
     }
 
