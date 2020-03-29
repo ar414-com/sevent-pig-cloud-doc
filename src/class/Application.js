@@ -1,6 +1,7 @@
-const { app, Menu, dialog, BrowserWindow, Tray, nativeImage } = require('electron');
+const { app, Menu, dialog, BrowserWindow,BrowserView, Tray, nativeImage, screen } = require('electron');
 const Store = require('electron-store');
 const isDev = require('electron-is-dev');
+const AppWindow = require('./AppWindow');
 const QiniuManager = require('./QiniuManager');
 const packageData = require('./PackageData');
 const menuTemplate  = require("../menuTemplate");
@@ -16,6 +17,7 @@ class Application {
     constructor(mainWindow) {
         this.mainWindow = mainWindow;
         this.appMenu = Menu.buildFromTemplate(menuTemplate);
+        this.screenSize = screen.getPrimaryDisplay().size;
     }
 
     closeTray() {
@@ -26,8 +28,39 @@ class Application {
         Menu.setApplicationMenu(this.appMenu);
     }
 
+    showTrayTips(x,y) {
+        if(!this.tipsWin){
+            this.tipsWin = new AppWindow({
+                // parent:this.mainWindow,
+                width: 300,
+                height: 100,
+                // autoHideMenuBar: true,
+                // maximizable: false,
+                // minimizable: false,
+                // resizable:false,
+                // titleBarStyle:'customButtonsOnHover',
+                // skipTaskbar:false,
+                // modal:true,
+                // closable:false,
+                alwaysOnTop:true,
+                // thickFrame:false,
+                frame:false,
+                // show:true,
+                x:x,
+                y:y,
+            },'');
+        }
+        this.tipsWin.show();
+    }
+
+    closeTrayTips() {
+        if(this.tipsWin){
+            this.tipsWin.hide();
+        }
+    }
+
     createTray() {
-        console.log('createTray')
+        console.log(screen.getPrimaryDisplay().workAreaSize)
         tray = new Tray(path.join(Application.getAppRootPath(),'./assets/tray26.ico'));
         const trayContextMenu = Menu.buildFromTemplate([
             {...this.appMenu.items[2].submenu.items[0],icon:path.join(Application.getAppRootPath(),'./src/images/setting.png'),accelerator:null},
@@ -48,19 +81,49 @@ class Application {
         tray.addListener('double-click',((event, bounds) => {
             this.mainWindow.show();
         }));
+        //MAC
         tray.addListener('mouse-enter',((event, position) => {
             console.log('mouse-enter');
             // this.mainWindow.show();
         }));
         tray.addListener('mouse-move',((event, position) => {
-            tray.displayBalloon({
-                iconType:'info',
-                title:'新消息',
-                content:'Hi,this is mouse-move event'
-            })
+
+            console.log(position);
+            //TODO 结合 screen.getPrimaryDisplay().workAreaSize 来判断任务栏位置
+            //TODO
+            //上 y:0
+            //左 x:-100-100
+            //下 y:size.height-100 < y <size.height
+            //右 x:size.width-100 < x < size.width
+            // const trayPosition = tray.getBounds();
+            // if(trayPosition.y < this.screenSize.height / 2){
+            //     console.log('t');
+            // }else if(trayPosition.x > -100 && trayPosition.x < this.screenSize.width / 2){
+            //     console.log('l');
+            // }else if(trayPosition.y > this.screenSize.height / 2){
+            //     console.log('b')
+            //     this.showTrayTips(position.x - 140,position.y -121);
+            // }else if((trayPosition.x >= this.screenSize.width / 2) && trayPosition.x < this.screenSize.width){
+            //     console.log('r');
+            // }
+            // this.showTrayTips(position.x - 140,position.y -121);
+
+            //b tray.getBounds { x: 1748, y: 954, width: 24, height: 40 }
+            //r tray.getBounds { x: 1813, y: 897, width: 24, height: 24 }
+            if(!this.isBalloonShow){
+                tray.displayBalloon({
+                    iconType:'info',
+                    title:'新消息',
+                    content:'Hi,this is mouse-move event'
+                });
+            }
+            this.isBalloonShow = true;
             // console.log('mouse-move',event,position);
             // this.mainWindow.show();
         }));
+        console.log('tray.getBounds',tray.getBounds());
+
+        // this.showTrayTips();
     }
 
     updateCloudSyncMenu() {

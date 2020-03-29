@@ -1,7 +1,7 @@
 {
   "name": "sevent-pig-cloud-doc",
   "cnName": "七猪云文档",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "main": "main.js",
   "description": "Online Markdown Editor Doc using Qinui cloud service",
   "author": {
