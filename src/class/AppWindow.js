@@ -10,17 +10,12 @@ class AppWindow extends BrowserWindow {
             webPreferences: {
                 nodeIntegration:true
             },
-            show: false,
             backgroundColor: '#efefef'
         };
 
         const finaConfig = { ...baseConfig, ...config };
         super(finaConfig);
         this.loadURL(url);
-        this.once('ready-to-show', () => {
-            this.show();
-            // this.focus();
-        });
     }
 
 }

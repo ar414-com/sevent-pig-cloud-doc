@@ -26,45 +26,71 @@ class Application {
         Menu.setApplicationMenu(this.appMenu);
     }
 
-    showTrayTips(x,y) {
-
-
+    showTrayTips(x = 0,y = 0) {
 
         if(!this.tipsWin){
             const taskArea = this.getTaryArea();
-            console.log(taskArea);
+            const trayPosition = this.tray.getBounds();
+            const workAreaSize = screen.getPrimaryDisplay().workAreaSize;
+            console.log(taskArea)
             switch (taskArea) {
                 case 39:
-                    console.log('right')
+                    x = workAreaSize.width - 260;
+                    y = trayPosition.y - 40;
+                    break;
+                case 40:
+                    x = trayPosition.x - 95;
+                    y = workAreaSize.height - 115;
+                    break;
+                case 37:
+                    x = this.screenSize.width - workAreaSize.width;
+                    y = trayPosition.y - 35;
                     break;
                 default:
+                    x = trayPosition.x - 110;
+                    y = this.screenSize.height - workAreaSize.height;
                     break;
             }
             this.tipsWin = new BrowserWindow({
-                width: 300,
-                height: 100,
+                width: 230,
+                height: 115,
+                x:x,
+                y:y,
                 skipTaskbar:true,
                 alwaysOnTop:true,
                 frame:false,
+                show: false
             });
-
-            // setTimeout(() => this.closeTrayTips(),2000)
+            this.tipsWin.loadURL(`file://${path.join(Application.getAppRootPath(),'./src/html/tips/tips.html')}`);
+            this.tipsWin.once('ready-to-show', () => {
+                this.tipsWin.show();
+            });
         }
+
+
 
         if(TipShowTimerId === null){
-            console.log(screen.getCursorScreenPoint())
             TipShowTimerId = setInterval(() => {
-                console.log(TipShowTimerId);
                 const cursorPosition = screen.getCursorScreenPoint();
                 const trayPosition = this.tray.getBounds();
-                //x+width y+height
-                if(!(cursorPosition.x >  trayPosition.x && cursorPosition.x <= trayPosition.x + trayPosition.width) ||
-                    !(cursorPosition.y >  trayPosition.y && cursorPosition.y <= trayPosition.y + trayPosition.height)
-                ){
-                    this.closeTrayTips();
+                const tipWinPosition = this.tipsWin.getBounds();
+
+                //托盘icon
+                if((cursorPosition.x >  trayPosition.x && cursorPosition.x <= trayPosition.x + trayPosition.width) && (cursorPosition.y >  trayPosition.y && cursorPosition.y <= trayPosition.y + trayPosition.height))
+                {
+                    return;
                 }
-            }, 400);
+
+                //消息框
+                if((cursorPosition.x >  tipWinPosition.x && cursorPosition.x <= tipWinPosition.x + tipWinPosition.width) && (cursorPosition.y >  tipWinPosition.y && cursorPosition.y <= tipWinPosition.y + tipWinPosition.height))
+                {
+                    return;
+                }
+
+                this.closeTrayTips();
+            }, 250);
         }
+
         //定时器 监听鼠标是否停留在托盘上
     }
 
@@ -118,8 +144,20 @@ class Application {
         throw Error('get task area error');
     }
 
+    setShowMsgTip() {
+        OnlyID = setInterval(() => {
+            this.tray.setImage(path.join(Application.getAppRootPath(),'./assets/tray26.ico'));
+            setTimeout(() => {
+                // 写逻辑代码
+                // this.tray.setImage(path.join(Application.getAppRootPath(),'./assets/tray26.ico'));
+                this.tray.setImage(nativeImage.createEmpty());
+            }, 500)
+        }, 1000);
+
+    }
+
     createTray() {
-        console.log(screen.getPrimaryDisplay().workAreaSize)
+
         this.tray = new Tray(path.join(Application.getAppRootPath(),'./assets/tray26.ico'));
         const trayContextMenu = Menu.buildFromTemplate([
             {...this.appMenu.items[2].submenu.items[0],icon:path.join(Application.getAppRootPath(),'./src/images/setting.png'),accelerator:null},
@@ -127,16 +165,7 @@ class Application {
         ]);
         this.tray.setToolTip(packageData.getVar('cnName'));
         this.tray.setContextMenu(trayContextMenu);
-        //TODO 闪烁 一般是消息通知
-        // OnlyID = setInterval(() => {
-        //     console.log(OnlyID);
-        //     this.tray.setImage(path.join(Application.getAppRootPath(),'./assets/tray-pink.ico'));
-        //     setTimeout(() => {
-        //         // 写逻辑代码
-        //         // this.tray.setImage(path.join(Application.getAppRootPath(),'./assets/tray26.ico'));
-        //         this.tray.setImage(nativeImage.createEmpty());
-        //     }, 650)
-        // }, 1300);
+
         this.tray.addListener('double-click',((event, bounds) => {
             this.mainWindow.show();
         }));
@@ -150,7 +179,7 @@ class Application {
             // console.log(position);
             //判断鼠标是否在托盘上
             // max x+width y+height
-            if(!this.isBalloonShow){
+            if(!this.isBalloonShow && OnlyID != null){
                 this.isBalloonShow = true;
                 this.showTrayTips();
             }
@@ -165,7 +194,7 @@ class Application {
             // }
             // this.isBalloonShow = true;
         }));
-        console.log('this.tray.getBounds',this.tray.getBounds());
+        this.setShowMsgTip();
     }
 
     updateCloudSyncMenu() {
