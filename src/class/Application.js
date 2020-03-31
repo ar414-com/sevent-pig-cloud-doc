@@ -289,6 +289,10 @@ class Application {
         return path.dirname(require.main.filename);
     }
 
+    static getImagePath() {
+
+    }
+
     static getMainUrl() {
         return isDev ? "http://localhost:3000/" : `file://${path.join(Application.getAppRootPath(),'./build/index.html')}`;
     }

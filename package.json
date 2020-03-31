@@ -25,6 +25,7 @@
       "node_modules/**/*",
       "src/html/**/*",
       "src/class/**/*",
+      "src/images/**/*",
       "main.js",
       "src/menuTemplate.js"
     ],
