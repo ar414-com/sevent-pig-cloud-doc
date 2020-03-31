@@ -3,6 +3,7 @@ const Store = require('electron-store');
 const isDev = require('electron-is-dev');
 const AppWindow = require('./AppWindow');
 const QiniuManager = require('./QiniuManager');
+const ElectronTrayTips = require('electron-tray-tips');
 const packageData = require('./PackageData');
 const menuTemplate  = require("../menuTemplate");
 const path = require('path');
@@ -163,7 +164,8 @@ class Application {
             {...this.appMenu.items[2].submenu.items[0],icon:path.join(Application.getAppRootPath(),'./src/images/setting.png'),accelerator:null},
             { label: '退出', role: 'quit',icon:path.join(Application.getAppRootPath(),'./src/images/quit.png') }
         ]);
-        this.tray.setToolTip(packageData.getVar('cnName'));
+        // this.tray.setToolTip(packageData.getVar('cnName'));
+        this.tray.setToolTip('ar414');
         this.tray.setContextMenu(trayContextMenu);
 
         this.tray.addListener('double-click',((event, bounds) => {
@@ -174,6 +176,7 @@ class Application {
             console.log('mouse-enter');
             // this.mainWindow.show();
         }));
+
         this.tray.addListener('mouse-move',((event, position) => {
             // console.log(this.tray.getBounds());
             // console.log(position);
@@ -181,7 +184,11 @@ class Application {
             // max x+width y+height
             if(!this.isBalloonShow && OnlyID != null){
                 this.isBalloonShow = true;
-                this.showTrayTips();
+                const ElectronTrayTipsClass = new ElectronTrayTips(this.tray);
+                ElectronTrayTipsClass.showTrayTips(`file://${path.join(Application.getAppRootPath(),'./src/html/tips/tips.html')}`,() => {
+                    this.isBalloonShow = false;
+                });
+                // this.showTrayTips();
             }
             //{ x: 1887, y: 849, width: 24, height: 24 }
             //max
