@@ -35,7 +35,7 @@ class Application {
             console.log(taskArea)
             switch (taskArea) {
                 case 39:
-                    x = workAreaSize.width - 260;
+                    x = workAreaSize.width - 230;
                     y = trayPosition.y - 40;
                     break;
                 case 40:

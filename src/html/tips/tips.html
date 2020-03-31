@@ -24,6 +24,25 @@
             overflow: hidden;
             background-color: #F5F5F5;
         }
+
+        .user-info:hover {
+            background-color: #95999c;
+        }
+
+        .msg-num {
+            background-color: #F05033;
+            height: 1.5rem;
+            width: 2.3rem;
+            /*height: 1rem;*/
+            border: 1px solid red;
+            padding: 0rem;
+            border-radius: 45%;
+            font-size: 0.9rem;
+            text-align: center;
+            display: table-cell;
+            vertical-align:middle;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -33,16 +52,19 @@
             <span class="font-weight-bold">新消息（1）</span>
         </div>
     </div>
-    <div class="flex-grow-1 mt-2">
-        <div class="pl-4 bg-info pt-2 d-flex flex-row align-items-center">
-<!--            <p>新消息</p>-->
-            <img src="../../../assets/icon.png" width="40vw" height="40vw" />
-            <span class="font-weight-bold ml-3">七猪云</span>
+    <div class="flex-grow-1 mt-3">
+        <div class="pl-4 pt-1 d-flex flex-row align-items-center user-info">
+            <img src="../../images/chunchunboss.jpg" width="37vw" height="37vw" />
+            <span class="font-weight-bold ml-3">chunchunboss</span>
+            <div class="ml-4 msg-num">
+                99
+                <!--<span>99</span>-->
+            </div>
         </div>
     </div>
-    <hr class="mb-0 mt-0" />
+    <hr class="mb-0 mt-2" />
     <div class="flex-grow-2 d-flex justify-content-end align-items-center">
-        <div class="pr-3 pt-2">
+        <div class="pr-3 pt-1">
             <a href="#" class="text-decoration-none" style="font-size:0.95rem;color: #3E9D5A">忽略全部</a>
         </div>
     </div>
