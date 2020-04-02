@@ -147,7 +147,7 @@ class Application {
 
     setShowMsgTip() {
         OnlyID = setInterval(() => {
-            this.tray.setImage(path.join(Application.getAppRootPath(),'./assets/tray26.ico'));
+            this.tray.setImage(Application.getImagePath('tray26.ico'));
             setTimeout(() => {
                 // 写逻辑代码
                 // this.tray.setImage(path.join(Application.getAppRootPath(),'./assets/tray26.ico'));
@@ -159,10 +159,10 @@ class Application {
 
     createTray() {
 
-        this.tray = new Tray(path.join(Application.getAppRootPath(),'./assets/tray26.ico'));
+        this.tray = new Tray(Application.getImagePath('tray26.ico'));
         const trayContextMenu = Menu.buildFromTemplate([
-            {...this.appMenu.items[2].submenu.items[0],icon:path.join(Application.getAppRootPath(),'./src/images/setting.png'),accelerator:null},
-            { label: '退出', role: 'quit',icon:path.join(Application.getAppRootPath(),'./src/images/quit.png') }
+            {...this.appMenu.items[2].submenu.items[0],icon:Application.getImagePath('setting.png'),accelerator:null},
+            { label: '退出', role: 'quit',icon:Application.getImagePath('quit.png') }
         ]);
         // this.tray.setToolTip(packageData.getVar('cnName'));
         this.tray.setToolTip('ar414');
@@ -289,8 +289,8 @@ class Application {
         return path.dirname(require.main.filename);
     }
 
-    static getImagePath() {
-
+    static getImagePath($fileName) {
+        return path.join(Application.getAppRootPath(),`./src/images/${$fileName}`);
     }
 
     static getMainUrl() {
