@@ -2,6 +2,7 @@ const { app, Menu, dialog, BrowserWindow, Tray, nativeImage, screen } = require(
 const Store = require('electron-store');
 const isDev = require('electron-is-dev');
 const AppWindow = require('./AppWindow');
+const isMac = process.platform === 'darwin';
 const QiniuManager = require('./QiniuManager');
 const ElectronTrayTips = require('electron-tray-tips');
 const packageData = require('./PackageData');
@@ -182,7 +183,7 @@ class Application {
             // console.log(position);
             //判断鼠标是否在托盘上
             // max x+width y+height
-            if(!this.isBalloonShow && OnlyID != null){
+            if(!isMac && !this.isBalloonShow && OnlyID != null){
                 this.isBalloonShow = true;
                 const ElectronTrayTipsClass = new ElectronTrayTips(this.tray);
                 ElectronTrayTipsClass.showTrayTips(`file://${path.join(Application.getAppRootPath(),'./src/html/tips/tips.html')}`,() => {
@@ -201,7 +202,7 @@ class Application {
             // }
             // this.isBalloonShow = true;
         }));
-        this.setShowMsgTip();
+        !isMac && this.setShowMsgTip();
     }
 
     updateCloudSyncMenu() {

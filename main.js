@@ -15,7 +15,7 @@ app.on('ready',() => {
     mainWindow.on('closed', () => {
         app.quit();
     });
-    // application.onAppAutoUpdate();
+    application.onAppAutoUpdate();
     application.createAppMenu();
     ipcMainListenerManager.initListener();
     application.createTray();
