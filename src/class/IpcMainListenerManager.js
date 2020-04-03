@@ -98,7 +98,7 @@ class IpcMainListenerManager {
                 maximizable: false,
                 minimizable: false,
                 modal:true,
-            },`file://${path.join(applicationClass.getAppRootPath(),'./src/html/tips/tips.html')}`);
+            },`file://${path.join(applicationClass.getAppRootPath(),'./src/html/setting/setting.html')}`);
             this.settingWindow.on('closed', () => {
                 this.settingWindow = null;
                 this.mainWindow.focus();
